@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaClock, FaHospital, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaHospital,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
@@ -14,27 +19,29 @@ export default function PendingDonationRequests() {
   }, [axiosPublic]);
 
   return (
-    <main className="bg-slate-50">
-      <section className="bg-[#fff7f5] border-b border-red-100">
+    <main className="bg-slate-50 dark:bg-slate-950">
+      <section className="border-b border-red-100 bg-[#fff7f5] dark:border-slate-800 dark:bg-slate-950">
         <div className="container mx-auto px-6 py-14">
-          <p className="text-sm font-bold uppercase tracking-wide text-red-600">
+          <p className="text-sm font-bold uppercase tracking-wide text-red-600 dark:text-red-400">
             Donation requests
           </p>
           <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h1 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">
+              <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl dark:text-white">
                 Pending blood donation requests
               </h1>
-              <p className="mt-3 max-w-2xl leading-8 text-slate-600">
+              <p className="mt-3 max-w-2xl leading-8 text-slate-600 dark:text-slate-300">
                 Review urgent requests by blood group, hospital, date, and
                 location before opening the full request.
               </p>
             </div>
-            <div className="rounded-lg border border-red-100 bg-white px-5 py-4 shadow-sm">
-              <p className="text-3xl font-extrabold text-red-600">
+            <div className="rounded-lg border border-red-100 bg-white px-5 py-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+              <p className="text-3xl font-extrabold text-red-600 dark:text-red-400">
                 {pendingRequests.length}
               </p>
-              <p className="text-sm font-bold text-slate-600">Open requests</p>
+              <p className="text-sm font-bold text-slate-600 dark:text-slate-300">
+                Open requests
+              </p>
             </div>
           </div>
         </div>
@@ -42,19 +49,19 @@ export default function PendingDonationRequests() {
 
       <section className="container mx-auto px-6 py-12">
         {pendingRequests.length < 1 ? (
-          <div className="rounded-lg border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <h2 className="text-2xl font-extrabold text-slate-950">
+          <div className="rounded-lg border border-slate-200 bg-white p-10 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
               No pending donation requests found
             </h2>
-            <p className="mt-3 text-slate-600">
+            <p className="mt-3 text-slate-600 dark:text-slate-300">
               New requests will appear here when recipients publish them.
             </p>
           </div>
         ) : (
           <>
-            <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:block">
+            <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900/80 lg:block">
               <table className="min-w-full">
-                <thead className="bg-teal-950 text-left text-sm uppercase tracking-wide text-white">
+                <thead className="bg-teal-950 text-left text-sm uppercase tracking-wide text-white dark:bg-slate-800">
                   <tr>
                     <th className="px-5 py-4">Recipient</th>
                     <th className="px-5 py-4">Location</th>
@@ -65,10 +72,13 @@ export default function PendingDonationRequests() {
                     <th className="px-5 py-4">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {pendingRequests.map((request) => (
-                    <tr key={request._id} className="transition hover:bg-red-50/50">
-                      <td className="px-5 py-4 font-bold text-slate-900">
+                    <tr
+                      key={request._id}
+                      className="transition hover:bg-red-50/50 dark:hover:bg-slate-800/70"
+                    >
+                      <td className="px-5 py-4 font-bold text-slate-900 dark:text-white">
                         {request.recipientName}
                       </td>
                       <td className="px-5 py-4 text-slate-600">
@@ -82,8 +92,12 @@ export default function PendingDonationRequests() {
                           {request.bloodGroup}
                         </span>
                       </td>
-                      <td className="px-5 py-4 text-slate-600">{request.date}</td>
-                      <td className="px-5 py-4 text-slate-600">{request.time}</td>
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
+                        {request.date}
+                      </td>
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
+                        {request.time}
+                      </td>
                       <td className="px-5 py-4">
                         <Link
                           to={`/donation-request-details/${request._id}`}
@@ -102,14 +116,14 @@ export default function PendingDonationRequests() {
               {pendingRequests.map((request) => (
                 <article
                   key={request._id}
-                  className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+                  className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900/80"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h2 className="text-xl font-extrabold text-slate-950">
+                      <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
                         {request.recipientName}
                       </h2>
-                      <p className="mt-1 flex items-center gap-2 text-slate-600">
+                      <p className="mt-1 flex items-center gap-2 text-slate-600 dark:text-slate-300">
                         <FaMapMarkerAlt className="text-red-600" />
                         {request.district}, {request.upazilla}
                       </p>
@@ -118,7 +132,7 @@ export default function PendingDonationRequests() {
                       {request.bloodGroup}
                     </span>
                   </div>
-                  <div className="mt-5 grid gap-3 text-slate-600">
+                  <div className="mt-5 grid gap-3 text-slate-600 dark:text-slate-300">
                     <p className="flex items-center gap-2">
                       <FaHospital className="text-teal-700" />
                       {request.hospital}

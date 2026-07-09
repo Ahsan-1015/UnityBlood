@@ -120,6 +120,7 @@ async function run() {
         if (!user || !user.email) {
           return res.status(400).send({ error: "Invalid user data" });
         }
+        user.createdAt = new Date();
         const query = { email: user.email };
         const existingUser = await usersCollection.findOne(query);
         if (existingUser) {
@@ -138,6 +139,7 @@ async function run() {
 
     app.post("/createDonationRequest", verifyToken, async (req, res) => {
       const donationRequest = req.body;
+      donationRequest.createdAt = new Date();
       const result = await requestsCollection.insertOne(donationRequest);
       res.send(result);
     });
@@ -183,12 +185,18 @@ async function run() {
 
     app.get("/pending-donation-requests", async (req, res) => {
       const query = { donationStatus: "pending" };
-      const requests = await requestsCollection.find(query).toArray();
+      const requests = await requestsCollection
+        .find(query)
+        .sort({ createdAt: -1, date: -1, _id: -1 })
+        .toArray();
       res.send(requests);
     });
 
     app.get("/allUsers", verifyToken, async (req, res) => {
-      const allUsers = await usersCollection.find().toArray();
+      const allUsers = await usersCollection
+        .find()
+        .sort({ createdAt: -1, _id: -1 })
+        .toArray();
       res.send(allUsers);
     });
     app.get("/allBlogs", verifyToken, async (req, res) => {
@@ -214,11 +222,17 @@ async function run() {
     app.get("/allDonationRequests", verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { requesterEmail: email };
-      const allUserRequests = await requestsCollection.find(query).toArray();
+      const allUserRequests = await requestsCollection
+        .find(query)
+        .sort({ createdAt: -1, date: -1, _id: -1 })
+        .toArray();
       res.send(allUserRequests);
     });
     app.get("/allDonationRequestsAd", verifyToken, async (req, res) => {
-      const allDonationRequests = await requestsCollection.find().toArray();
+      const allDonationRequests = await requestsCollection
+        .find()
+        .sort({ createdAt: -1, date: -1, _id: -1 })
+        .toArray();
       res.send(allDonationRequests);
     });
 

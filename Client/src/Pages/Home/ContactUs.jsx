@@ -2,7 +2,12 @@ import "animate.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect, useState } from "react";
-import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt, FaRegClock } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaRegClock,
+} from "react-icons/fa";
 
 const ContactUs = () => {
   useEffect(() => {
@@ -25,16 +30,16 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="bg-teal-950 py-20 text-white">
+    <section className="bg-slate-100 py-20 text-slate-900 dark:bg-slate-950 dark:text-white">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-bold uppercase tracking-wide text-red-300">
+          <p className="text-sm font-bold uppercase tracking-wide text-red-600 dark:text-red-300">
             Contact
           </p>
           <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">
             Need help with a donation request or partnership?
           </h2>
-          <p className="mt-4 leading-8 text-slate-300">
+          <p className="mt-4 leading-8 text-slate-600 dark:text-slate-300">
             Reach the UnityBlood team for support, campaign coordination, or
             organization-level collaboration.
           </p>
@@ -43,7 +48,7 @@ const ContactUs = () => {
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div
             data-aos="fade-right"
-            className="rounded-lg border border-white/10 bg-white p-7 text-slate-900 shadow-2xl shadow-black/20"
+            className="rounded-lg border border-slate-200 bg-white p-7 text-slate-900 shadow-2xl shadow-slate-200/60 dark:border-white/10 dark:bg-slate-900 dark:text-slate-100 dark:shadow-black/20"
           >
             <h3 className="text-2xl font-extrabold text-slate-950">
               Send a message
@@ -108,7 +113,7 @@ const ContactUs = () => {
 
           <div
             data-aos="fade-left"
-            className="rounded-lg border border-white/10 bg-white/[0.06] p-7 shadow-2xl shadow-black/20 backdrop-blur"
+            className="rounded-lg border border-slate-200 bg-slate-50/70 p-7 shadow-2xl shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:bg-white/[0.06] dark:shadow-black/20"
           >
             <h3 className="text-2xl font-extrabold">Contact information</h3>
 
@@ -139,7 +144,7 @@ const ContactUs = () => {
                 </span>
               </a>
 
-              <div className="flex items-center gap-4 rounded-lg border border-white/10 bg-white/[0.05] p-4">
+              <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white/80 p-4 dark:border-white/10 dark:bg-white/[0.05]">
                 <span className="flex h-11 w-11 items-center justify-center rounded-md bg-slate-700 text-white">
                   <FaMapMarkerAlt />
                 </span>
@@ -149,7 +154,7 @@ const ContactUs = () => {
                 </span>
               </div>
 
-              <div className="flex items-start gap-4 rounded-lg border border-white/10 bg-white/[0.05] p-4">
+              <div className="flex items-start gap-4 rounded-lg border border-slate-200 bg-white/80 p-4 dark:border-white/10 dark:bg-white/[0.05]">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-amber-500 text-slate-950">
                   <FaRegClock />
                 </span>

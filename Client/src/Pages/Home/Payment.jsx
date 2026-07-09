@@ -6,16 +6,16 @@ export default function Payment() {
   const [formOpen, setFromOpen] = useState(false);
 
   return (
-    <main className="bg-slate-50">
-      <section className="bg-[#fff7f5] border-b border-red-100">
+    <main className="bg-slate-50 dark:bg-slate-950">
+      <section className="border-b border-red-100 bg-[#fff7f5] dark:border-slate-800 dark:bg-slate-950">
         <div className="container mx-auto px-6 py-14">
-          <p className="text-sm font-bold uppercase tracking-wide text-red-600">
+          <p className="text-sm font-bold uppercase tracking-wide text-red-600 dark:text-red-400">
             Funding
           </p>
-          <h1 className="mt-3 text-3xl font-extrabold text-slate-950 sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl dark:text-white">
             Support UnityBlood community work
           </h1>
-          <p className="mt-3 max-w-2xl leading-8 text-slate-600">
+          <p className="mt-3 max-w-2xl leading-8 text-slate-600 dark:text-slate-300">
             Contributions help campaigns, awareness, coordination, and
             life-saving donation support.
           </p>
@@ -23,7 +23,7 @@ export default function Payment() {
       </section>
 
       <section className="container mx-auto px-6 py-10">
-        <div className="mx-auto mb-8 flex w-full max-w-md rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
+        <div className="mx-auto mb-8 flex w-full max-w-md rounded-lg border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
           <button
             onClick={() => setFromOpen(true)}
             className={`flex-1 rounded-md px-4 py-3 font-bold transition ${

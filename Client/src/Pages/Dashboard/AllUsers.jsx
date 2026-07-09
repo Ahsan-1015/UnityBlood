@@ -3,16 +3,33 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import DotLoading from "../Shared/DotLoading";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheckCircle, faUserShield, faUserGraduate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBan,
+  faCheckCircle,
+  faUserShield,
+  faUserGraduate,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function AllUsers() {
   const axiosSecure = useAxiosSecure();
 
-  const { data: allUsers = [], refetch, isLoading } = useQuery({
+  const {
+    data: allUsers = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["allUsers"],
     queryFn: async () => {
       const response = await axiosSecure.get("/allUsers");
-      return response.data;
+      return [...(response.data || [])].sort((a, b) => {
+        const aTime = new Date(
+          a.createdAt || a.updatedAt || a._id?.$oid || 0,
+        ).getTime();
+        const bTime = new Date(
+          b.createdAt || b.updatedAt || b._id?.$oid || 0,
+        ).getTime();
+        return bTime - aTime;
+      });
     },
   });
 
@@ -21,8 +38,12 @@ export default function AllUsers() {
       icon,
       title,
       text,
-      background: document.documentElement.classList.contains("dark") ? "#1e293b" : "#fff",
-      color: document.documentElement.classList.contains("dark") ? "#f1f5f9" : "#0f172a",
+      background: document.documentElement.classList.contains("dark")
+        ? "#1e293b"
+        : "#fff",
+      color: document.documentElement.classList.contains("dark")
+        ? "#f1f5f9"
+        : "#0f172a",
       showConfirmButton: false,
       timer: 1500,
     });
@@ -77,7 +98,10 @@ export default function AllUsers() {
       {/* Header section */}
       <div className="page-header">
         <h1>All Users Management</h1>
-        <p>Monitor user registration roles, profile details, and account active states</p>
+        <p>
+          Monitor user registration roles, profile details, and account active
+          states
+        </p>
       </div>
 
       {isLoading ? (
@@ -99,12 +123,18 @@ export default function AllUsers() {
               </thead>
               <tbody className="divide-y db-border">
                 {allUsers.map((user) => (
-                  <tr key={user._id} className="db-tr transition-colors duration-150">
+                  <tr
+                    key={user._id}
+                    className="db-tr transition-colors duration-150"
+                  >
                     {/* User Avatar */}
                     <td className="db-td">
                       <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-red-500/10">
                         <img
-                          src={user.image || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"}
+                          src={
+                            user.image ||
+                            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"
+                          }
                           alt={user.name}
                           className="w-full h-full object-cover"
                         />
@@ -114,32 +144,46 @@ export default function AllUsers() {
                     {/* Email / Name */}
                     <td className="db-td">
                       <div>
-                        <div className="font-semibold db-text text-sm">{user.name}</div>
-                        <div className="text-xs db-text-muted mt-0.5">{user.email}</div>
+                        <div className="font-semibold db-text text-sm">
+                          {user.name}
+                        </div>
+                        <div className="text-xs db-text-muted mt-0.5">
+                          {user.email}
+                        </div>
                       </div>
                     </td>
 
                     {/* Role */}
                     <td className="db-td">
-                      <span className={`badge ${
-                        user.role === "Admin"
-                          ? "badge-done"
-                          : user.role === "Volunteer"
-                          ? "badge-pending"
-                          : "badge-draft"
-                      }`}>
+                      <span
+                        className={`badge ${
+                          user.role === "Admin"
+                            ? "badge-done"
+                            : user.role === "Volunteer"
+                              ? "badge-pending"
+                              : "badge-draft"
+                        }`}
+                      >
                         {user.role}
                       </span>
                     </td>
 
                     {/* Status */}
                     <td className="db-td">
-                      <span className={`badge ${
-                        user.status === "Active" ? "badge-active" : "badge-blocked"
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          user.status === "Active" ? "bg-green-500 animate-pulse" : "bg-red-500"
-                        }`} />
+                      <span
+                        className={`badge ${
+                          user.status === "Active"
+                            ? "badge-active"
+                            : "badge-blocked"
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            user.status === "Active"
+                              ? "bg-green-500 animate-pulse"
+                              : "bg-red-500"
+                          }`}
+                        />
                         {user.status}
                       </span>
                     </td>
@@ -153,7 +197,10 @@ export default function AllUsers() {
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-emerald-500/10 hover:text-emerald-500 dark:hover:text-emerald-400"
                             title="Make Admin"
                           >
-                            <FontAwesomeIcon icon={faUserShield} className="text-[10px]" />
+                            <FontAwesomeIcon
+                              icon={faUserShield}
+                              className="text-[10px]"
+                            />
                             Admin
                           </button>
                         )}
@@ -163,7 +210,10 @@ export default function AllUsers() {
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-sky-500/10 hover:text-sky-500 dark:hover:text-sky-400"
                             title="Make Volunteer"
                           >
-                            <FontAwesomeIcon icon={faUserGraduate} className="text-[10px]" />
+                            <FontAwesomeIcon
+                              icon={faUserGraduate}
+                              className="text-[10px]"
+                            />
                             Volunteer
                           </button>
                         )}
@@ -173,7 +223,10 @@ export default function AllUsers() {
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-green-500/10 hover:text-green-500 dark:hover:text-green-400"
                             title="Unblock User"
                           >
-                            <FontAwesomeIcon icon={faCheckCircle} className="text-[10px]" />
+                            <FontAwesomeIcon
+                              icon={faCheckCircle}
+                              className="text-[10px]"
+                            />
                             Unblock
                           </button>
                         ) : (
@@ -182,7 +235,10 @@ export default function AllUsers() {
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400"
                             title="Block User"
                           >
-                            <FontAwesomeIcon icon={faBan} className="text-[10px]" />
+                            <FontAwesomeIcon
+                              icon={faBan}
+                              className="text-[10px]"
+                            />
                             Block
                           </button>
                         )}

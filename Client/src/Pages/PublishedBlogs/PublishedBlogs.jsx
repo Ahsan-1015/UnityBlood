@@ -31,16 +31,16 @@ export default function PublishedBlogs() {
   };
 
   return (
-    <main className="bg-slate-50">
-      <section className="bg-[#fff7f5] border-b border-red-100">
+    <main className="bg-slate-50 dark:bg-slate-950">
+      <section className="border-b border-red-100 bg-[#fff7f5] dark:border-slate-800 dark:bg-slate-950">
         <div className="container mx-auto px-6 py-14">
-          <p className="text-sm font-bold uppercase tracking-wide text-red-600">
+          <p className="text-sm font-bold uppercase tracking-wide text-red-600 dark:text-red-400">
             Resources
           </p>
-          <h1 className="mt-3 text-3xl font-extrabold text-slate-950 sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl dark:text-white">
             Published blood donation articles
           </h1>
-          <p className="mt-3 max-w-2xl leading-8 text-slate-600">
+          <p className="mt-3 max-w-2xl leading-8 text-slate-600 dark:text-slate-300">
             Read practical guidance, campaign updates, and stories from the
             UnityBlood community.
           </p>
@@ -49,11 +49,11 @@ export default function PublishedBlogs() {
 
       <section className="container mx-auto px-6 py-12">
         {blogs.length < 1 ? (
-          <div className="rounded-lg border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <h2 className="text-2xl font-extrabold text-slate-950">
+          <div className="rounded-lg border border-slate-200 bg-white p-10 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
               No published blogs found
             </h2>
-            <p className="mt-3 text-slate-600">
+            <p className="mt-3 text-slate-600 dark:text-slate-300">
               Published articles will appear here after admin approval.
             </p>
           </div>
@@ -62,7 +62,7 @@ export default function PublishedBlogs() {
             {blogs.map((blog) => (
               <article
                 key={blog._id}
-                className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-red-50"
+                className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-red-50 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:shadow-red-950/20"
               >
                 <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
                   <img
@@ -71,14 +71,14 @@ export default function PublishedBlogs() {
                     className="h-56 w-full object-cover md:h-full"
                   />
                   <div className="p-6">
-                    <div className="mb-4 inline-flex items-center gap-2 rounded-md bg-red-50 px-3 py-1 text-sm font-bold text-red-700">
+                    <div className="mb-4 inline-flex items-center gap-2 rounded-md bg-red-50 px-3 py-1 text-sm font-bold text-red-700 dark:bg-red-500/10 dark:text-red-400">
                       <FaBookOpen />
                       Article
                     </div>
-                    <h2 className="text-2xl font-extrabold text-slate-950">
+                    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
                       {blog.title}
                     </h2>
-                    <p className="mt-3 leading-7 text-slate-600">
+                    <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
                       {stripHtmlTags(blog.content).length > 130
                         ? `${stripHtmlTags(blog.content).substring(0, 130)}...`
                         : stripHtmlTags(blog.content)}
@@ -99,7 +99,7 @@ export default function PublishedBlogs() {
 
       {isModalOpen && selectedBlog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl dark:bg-slate-900">
             <img
               src={selectedBlog.thumbnailUrl}
               alt={selectedBlog.title}
@@ -107,19 +107,19 @@ export default function PublishedBlogs() {
             />
             <div className="p-6">
               <div className="flex items-start justify-between gap-4">
-                <h2 className="text-3xl font-extrabold text-slate-950">
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
                   {selectedBlog.title}
                 </h2>
                 <button
                   onClick={closeModal}
-                  className="rounded-md border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50"
+                  className="rounded-md border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                   aria-label="Close blog"
                 >
                   <FaTimes />
                 </button>
               </div>
               <div
-                className="prose mt-5 max-w-none text-slate-700"
+                className="prose mt-5 max-w-none text-slate-700 dark:text-slate-300"
                 dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
               />
             </div>

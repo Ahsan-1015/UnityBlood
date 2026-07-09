@@ -8,10 +8,10 @@ export default function AllFunding() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-extrabold text-slate-950">
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
           Funding records
         </h2>
-        <p className="mt-3 text-slate-600">
+        <p className="mt-3 text-slate-600 dark:text-slate-300">
           Contributions from people supporting the UnityBlood mission.
         </p>
       </div>
@@ -20,21 +20,23 @@ export default function AllFunding() {
         {allFunding.map((item) => (
           <div
             key={item._id}
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:border-red-200 hover:shadow-lg hover:shadow-red-50"
+            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:border-red-200 hover:shadow-lg hover:shadow-red-50 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:shadow-red-950/20"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
-                <span className="flex h-12 w-12 items-center justify-center rounded-md bg-red-50 text-red-600">
+                <span className="flex h-12 w-12 items-center justify-center rounded-md bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400">
                   <FaHandHoldingHeart />
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-slate-500">Amount</p>
-                  <p className="text-2xl font-extrabold text-red-600">
+                  <p className="text-sm font-bold text-slate-500 dark:text-slate-400">
+                    Amount
+                  </p>
+                  <p className="text-2xl font-extrabold text-red-600 dark:text-red-400">
                     USD {item.amount}
                   </p>
                 </div>
               </div>
-              <div className="grid gap-2 text-sm text-slate-600">
+              <div className="grid gap-2 text-sm text-slate-600 dark:text-slate-300">
                 <p className="flex items-center gap-2 font-bold">
                   <FaUser className="text-teal-700" />
                   {item.name}

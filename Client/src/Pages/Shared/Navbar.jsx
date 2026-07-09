@@ -1,12 +1,19 @@
-import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faMoon,
+  faSun,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { AuthContext } from "../../providers/AuthProvider";
+import { useTheme } from "../../providers/ThemeProvider";
 
 export default function Navbar() {
   const { user, logOut, loading } = useContext(AuthContext);
+  const { isDark, toggleTheme } = useTheme();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -29,17 +36,14 @@ export default function Navbar() {
         </div>
       ) : (
         <div>
-          <nav className="border-b border-red-100 bg-white/95 text-slate-900 shadow-sm backdrop-blur">
+          <nav className="border-b border-red-100/70 bg-white/95 text-slate-900 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100">
             <div className="container mx-auto px-4 flex justify-between items-center py-4">
               {/* Logo */}
-              <Link
-                to={"/"}
-                className="flex items-center gap-2"
-              >
+              <Link to={"/"} className="flex items-center gap-2">
                 <img className="h-10" src={logo} alt="UnityBlood" />
-                <span className="font-black text-2xl xl:text-3xl text-teal-700">
+                <span className="font-black text-2xl xl:text-3xl text-teal-700 dark:text-teal-400">
                   Unity
-                  <span className="text-red-600">Blood</span>
+                  <span className="text-red-600 dark:text-red-400">Blood</span>
                 </span>
               </Link>
 
@@ -48,10 +52,10 @@ export default function Navbar() {
                 <NavLink
                   to="/pending-donation-requests"
                   className={({ isActive }) =>
-                    `transition hover:text-red-600 ${
+                    `transition hover:text-red-600 dark:hover:text-red-400 ${
                       isActive
-                        ? "text-red-600 font-bold border-b-2 border-red-600"
-                        : "text-slate-600 font-semibold"
+                        ? "text-red-600 font-bold border-b-2 border-red-600 dark:text-red-400 dark:border-red-400"
+                        : "text-slate-600 font-semibold dark:text-slate-300"
                     }`
                   }
                 >
@@ -60,10 +64,10 @@ export default function Navbar() {
                 <NavLink
                   to="/blogs"
                   className={({ isActive }) =>
-                    `transition hover:text-red-600 ${
+                    `transition hover:text-red-600 dark:hover:text-red-400 ${
                       isActive
-                        ? "text-red-600 font-bold border-b-2 border-red-600"
-                        : "text-slate-600 font-semibold"
+                        ? "text-red-600 font-bold border-b-2 border-red-600 dark:text-red-400 dark:border-red-400"
+                        : "text-slate-600 font-semibold dark:text-slate-300"
                     }`
                   }
                 >
@@ -72,10 +76,10 @@ export default function Navbar() {
                 <NavLink
                   to="/payment"
                   className={({ isActive }) =>
-                    `transition hover:text-red-600 ${
+                    `transition hover:text-red-600 dark:hover:text-red-400 ${
                       isActive
-                        ? "text-red-600 font-bold border-b-2 border-red-600"
-                        : "text-slate-600 font-semibold"
+                        ? "text-red-600 font-bold border-b-2 border-red-600 dark:text-red-400 dark:border-red-400"
+                        : "text-slate-600 font-semibold dark:text-slate-300"
                     }`
                   }
                 >
@@ -85,11 +89,22 @@ export default function Navbar() {
 
               {/* User Avatar with Dropdown */}
 
-              <div className="flex gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={
+                    isDark ? "Switch to light mode" : "Switch to dark mode"
+                  }
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-red-200 bg-white text-slate-700 shadow-sm transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:text-red-400"
+                >
+                  <FontAwesomeIcon icon={isDark ? faSun : faMoon} />
+                </button>
+
                 <div className="relative">
                   {user && (
                     <button
-                      className="flex items-center space-x-2 rounded-md border border-red-100 bg-red-50 p-1 pr-3"
+                      className="flex items-center space-x-2 rounded-md border border-red-100 bg-red-50 p-1 pr-3 dark:border-slate-700 dark:bg-slate-800/80"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                       <img
@@ -97,24 +112,24 @@ export default function Navbar() {
                         alt="User Avatar"
                         className="w-10 h-10 rounded-md border-2 border-white object-cover"
                       />
-                      <span className="hidden md:block text-lg font-semibold text-slate-800">
+                      <span className="hidden md:block text-lg font-semibold text-slate-800 dark:text-slate-100">
                         {user?.displayName || ""}
                       </span>
                     </button>
                   )}
 
                   {isDropdownOpen && user && (
-                    <div className="p-2 absolute flex flex-col right-0 mt-2 w-48 bg-white text-slate-900 text-left rounded-lg shadow-xl border border-slate-200">
+                    <div className="p-2 absolute flex flex-col right-0 mt-2 w-48 bg-white text-slate-900 text-left rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
                       <Link
                         onClick={handleDashboard}
                         to="/dashboard"
-                        className="px-4 py-2 rounded-md hover:bg-red-50 hover:text-red-700"
+                        className="px-4 py-2 rounded-md hover:bg-red-50 hover:text-red-700 dark:hover:bg-slate-800 dark:hover:text-red-400"
                       >
                         Dashboard
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="text-left px-4 py-2 rounded-md hover:bg-red-50 hover:text-red-700"
+                        className="text-left px-4 py-2 rounded-md hover:bg-red-50 hover:text-red-700 dark:hover:bg-slate-800 dark:hover:text-red-400"
                       >
                         Logout
                       </button>
@@ -133,7 +148,7 @@ export default function Navbar() {
                 )}
 
                 <button
-                  className="md:hidden rounded-md border border-red-200 text-red-600"
+                  className="md:hidden rounded-md border border-red-200 text-red-600 dark:border-slate-700 dark:text-red-400"
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   {isOpen ? (
@@ -153,19 +168,22 @@ export default function Navbar() {
 
             {/* Mobile Links */}
             {isOpen && (
-              <div className="md:hidden border-t border-red-100 bg-white">
+              <div className="md:hidden border-t border-red-100 bg-white dark:border-slate-700 dark:bg-slate-900">
                 <Link
                   to="/pending-donation-requests"
-                  className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700"
+                  className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-400"
                 >
                   Donation Requests
                 </Link>
-                <Link to="/blogs" className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700">
+                <Link
+                  to="/blogs"
+                  className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-400"
+                >
                   Blog
                 </Link>
                 <Link
                   to="/payment"
-                  className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700"
+                  className="block px-4 py-3 font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-400"
                 >
                   Funding
                 </Link>

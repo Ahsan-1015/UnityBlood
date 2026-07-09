@@ -113,12 +113,15 @@ export default function CheckoutForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <label htmlFor="amount" className="text-sm font-bold text-slate-700">
+      <label
+        htmlFor="amount"
+        className="text-sm font-bold text-slate-700 dark:text-slate-300"
+      >
         Donation Amount
       </label>
       <div className="mb-5 mt-2 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
         <input
-          className="w-full rounded-md border border-slate-300 p-3 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+          className="w-full rounded-md border border-slate-300 bg-white p-3 text-slate-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           name="amount"
           type="number"
           placeholder="Enter your donation amount here"
@@ -132,11 +135,14 @@ export default function CheckoutForm() {
         </button>
       </div>
 
-      <label htmlFor="card-details" className="text-sm font-bold text-slate-700">
+      <label
+        htmlFor="card-details"
+        className="text-sm font-bold text-slate-700 dark:text-slate-300"
+      >
         Card Details
       </label>
       <CardElement
-        className="my-2 rounded-md border border-slate-300 p-3"
+        className="my-2 rounded-md border border-slate-300 p-3 dark:border-slate-700"
         options={{
           style: {
             base: {
@@ -161,7 +167,7 @@ export default function CheckoutForm() {
       </button>
       {error && <p className="mt-4 font-bold text-red-600">{error}</p>}
       {transactionId && (
-        <p className="mt-4 rounded-md bg-teal-50 p-3 font-bold text-teal-800">
+        <p className="mt-4 rounded-md bg-teal-50 p-3 font-bold text-teal-800 dark:bg-teal-500/10 dark:text-teal-300">
           Your transaction Id:{" "}
           <span className="font-bold">{transactionId}</span>
         </p>

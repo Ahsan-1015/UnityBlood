@@ -7,7 +7,14 @@ import useAllDonationRequests from "../../hooks/useAllDonationRequests";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import DotLoading from "../Shared/DotLoading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faEdit, faEye, faCheck, faTimes, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashAlt,
+  faEdit,
+  faEye,
+  faCheck,
+  faTimes,
+  faFilter,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 export default function AllDonationRequests() {
@@ -15,7 +22,11 @@ export default function AllDonationRequests() {
   const [isAdmin] = useAdmin();
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const { data: donationRequestsDB = [], refetch, isLoading } = useQuery({
+  const {
+    data: donationRequestsDB = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["donationRequestsDB"],
     queryFn: useAllDonationRequests(),
   });
@@ -29,8 +40,12 @@ export default function AllDonationRequests() {
           icon: "success",
           title: "Donation Complete!",
           text: "Status updated successfully.",
-          background: document.documentElement.classList.contains("dark") ? "#1e293b" : "#fff",
-          color: document.documentElement.classList.contains("dark") ? "#f1f5f9" : "#0f172a",
+          background: document.documentElement.classList.contains("dark")
+            ? "#1e293b"
+            : "#fff",
+          color: document.documentElement.classList.contains("dark")
+            ? "#f1f5f9"
+            : "#0f172a",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -46,8 +61,12 @@ export default function AllDonationRequests() {
           icon: "info",
           title: "Canceled!",
           text: "Donation status canceled.",
-          background: document.documentElement.classList.contains("dark") ? "#1e293b" : "#fff",
-          color: document.documentElement.classList.contains("dark") ? "#f1f5f9" : "#0f172a",
+          background: document.documentElement.classList.contains("dark")
+            ? "#1e293b"
+            : "#fff",
+          color: document.documentElement.classList.contains("dark")
+            ? "#f1f5f9"
+            : "#0f172a",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -63,8 +82,12 @@ export default function AllDonationRequests() {
       confirmButtonColor: "#ef4444",
       cancelButtonColor: "#475569",
       confirmButtonText: "Yes, delete it!",
-      background: document.documentElement.classList.contains("dark") ? "#1e293b" : "#fff",
-      color: document.documentElement.classList.contains("dark") ? "#f1f5f9" : "#0f172a",
+      background: document.documentElement.classList.contains("dark")
+        ? "#1e293b"
+        : "#fff",
+      color: document.documentElement.classList.contains("dark")
+        ? "#f1f5f9"
+        : "#0f172a",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/requestDelete/${id}`).then(() => {
@@ -73,17 +96,33 @@ export default function AllDonationRequests() {
             title: "Deleted!",
             text: "Your donation request has been deleted.",
             icon: "success",
-            background: document.documentElement.classList.contains("dark") ? "#1e293b" : "#fff",
-            color: document.documentElement.classList.contains("dark") ? "#f1f5f9" : "#0f172a",
+            background: document.documentElement.classList.contains("dark")
+              ? "#1e293b"
+              : "#fff",
+            color: document.documentElement.classList.contains("dark")
+              ? "#f1f5f9"
+              : "#0f172a",
           });
         });
       }
     });
   };
 
-  const filteredRequests = statusFilter === "all" 
-    ? donationRequestsDB 
-    : donationRequestsDB.filter(req => req.donationStatus === statusFilter);
+  const filteredRequests = (
+    statusFilter === "all"
+      ? donationRequestsDB
+      : donationRequestsDB.filter((req) => req.donationStatus === statusFilter)
+  )
+    .slice()
+    .sort((a, b) => {
+      const aTime = new Date(
+        a.createdAt || a.updatedAt || a._id?.$oid || 0,
+      ).getTime();
+      const bTime = new Date(
+        b.createdAt || b.updatedAt || b._id?.$oid || 0,
+      ).getTime();
+      return bTime - aTime;
+    });
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -91,7 +130,10 @@ export default function AllDonationRequests() {
       <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1>All Donation Requests</h1>
-          <p>Manage, track, verify or delete all blood donation requests submitted by users</p>
+          <p>
+            Manage, track, verify or delete all blood donation requests
+            submitted by users
+          </p>
         </div>
         {/* Status Filter */}
         <div className="flex items-center gap-2">
@@ -116,10 +158,15 @@ export default function AllDonationRequests() {
         </div>
       ) : filteredRequests.length === 0 ? (
         <div className="db-card p-12 text-center flex flex-col items-center justify-center">
-          <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mb-4 text-2xl">🩸</div>
-          <h3 className="text-lg font-bold db-text">No Donation Requests Found</h3>
+          <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mb-4 text-2xl">
+            🩸
+          </div>
+          <h3 className="text-lg font-bold db-text">
+            No Donation Requests Found
+          </h3>
           <p className="text-sm db-text-muted mt-1 max-w-md">
-            There are currently no blood donation requests matching the selected filter status.
+            There are currently no blood donation requests matching the selected
+            filter status.
           </p>
         </div>
       ) : (
@@ -139,7 +186,10 @@ export default function AllDonationRequests() {
               </thead>
               <tbody className="divide-y db-border">
                 {filteredRequests.map((item) => (
-                  <tr key={item._id} className="db-tr transition-colors duration-150">
+                  <tr
+                    key={item._id}
+                    className="db-tr transition-colors duration-150"
+                  >
                     {/* Recipient */}
                     <td className="db-td font-semibold db-text">
                       {item.recipientName}
@@ -147,7 +197,10 @@ export default function AllDonationRequests() {
 
                     {/* Location */}
                     <td className="db-td text-xs db-text-muted">
-                      {item.upazilla}, <span className="font-semibold db-text">{item.district}</span>
+                      {item.upazilla},{" "}
+                      <span className="font-semibold db-text">
+                        {item.district}
+                      </span>
                     </td>
 
                     {/* Date / Time */}
@@ -169,34 +222,44 @@ export default function AllDonationRequests() {
                     <td className="db-td text-xs">
                       {item.donorName ? (
                         <div>
-                          <div className="db-text font-semibold">{item.donorName}</div>
-                          <div className="db-text-muted mt-0.5">{item.donorEmail}</div>
+                          <div className="db-text font-semibold">
+                            {item.donorName}
+                          </div>
+                          <div className="db-text-muted mt-0.5">
+                            {item.donorEmail}
+                          </div>
                         </div>
                       ) : (
-                        <span className="text-slate-400 dark:text-slate-600 italic">Unassigned</span>
+                        <span className="text-slate-400 dark:text-slate-600 italic">
+                          Unassigned
+                        </span>
                       )}
                     </td>
 
                     {/* Status Badge */}
                     <td className="db-td">
-                      <span className={`badge ${
-                        item.donationStatus === "done"
-                          ? "badge-done"
-                          : item.donationStatus === "canceled"
-                          ? "badge-canceled"
-                          : item.donationStatus === "inprogress"
-                          ? "badge-inprogress"
-                          : "badge-pending"
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
+                      <span
+                        className={`badge ${
                           item.donationStatus === "done"
-                            ? "bg-green-500"
+                            ? "badge-done"
                             : item.donationStatus === "canceled"
-                            ? "bg-red-500"
-                            : item.donationStatus === "inprogress"
-                            ? "bg-blue-500 animate-pulse"
-                            : "bg-amber-500 animate-ping"
-                        }`} />
+                              ? "badge-canceled"
+                              : item.donationStatus === "inprogress"
+                                ? "badge-inprogress"
+                                : "badge-pending"
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            item.donationStatus === "done"
+                              ? "bg-green-500"
+                              : item.donationStatus === "canceled"
+                                ? "bg-red-500"
+                                : item.donationStatus === "inprogress"
+                                  ? "bg-blue-500 animate-pulse"
+                                  : "bg-amber-500 animate-ping"
+                          }`}
+                        />
                         {item.donationStatus}
                       </span>
                     </td>
@@ -210,7 +273,10 @@ export default function AllDonationRequests() {
                             className="w-8 h-8 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center transition-all duration-200"
                             title="Cancel Request"
                           >
-                            <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                            <FontAwesomeIcon
+                              icon={faTimes}
+                              className="text-xs"
+                            />
                           </button>
                         ) : (
                           <button
@@ -218,7 +284,10 @@ export default function AllDonationRequests() {
                             className="w-8 h-8 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 flex items-center justify-center transition-all duration-200"
                             title="Complete Request"
                           >
-                            <FontAwesomeIcon icon={faCheck} className="text-xs" />
+                            <FontAwesomeIcon
+                              icon={faCheck}
+                              className="text-xs"
+                            />
                           </button>
                         )}
                         <Link to={`/dashboard/request/edit/${item._id}`}>
@@ -226,7 +295,10 @@ export default function AllDonationRequests() {
                             className="w-8 h-8 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-500 dark:text-sky-400 flex items-center justify-center transition-all duration-200"
                             title="Edit"
                           >
-                            <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                            <FontAwesomeIcon
+                              icon={faEdit}
+                              className="text-xs"
+                            />
                           </button>
                         </Link>
                         {isAdmin && (
@@ -235,7 +307,10 @@ export default function AllDonationRequests() {
                             className="w-8 h-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 dark:text-red-400 flex items-center justify-center transition-all duration-200"
                             title="Delete"
                           >
-                            <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+                            <FontAwesomeIcon
+                              icon={faTrashAlt}
+                              className="text-xs"
+                            />
                           </button>
                         )}
                         <Link to={`/dashboard/request/view/${item._id}`}>
