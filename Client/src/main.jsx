@@ -1,7 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes/Routes.jsx";
@@ -15,9 +13,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ThemeProvider>
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
+          <Suspense
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                Loading...
+              </div>
+            }
+          >
+            <RouterProvider router={router} />
+          </Suspense>
         </QueryClientProvider>
       </AuthProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

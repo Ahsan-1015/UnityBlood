@@ -19,6 +19,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useTheme } from "../../providers/ThemeProvider";
+import logo from "../../assets/images/logo.png";
 import "../Dashboard/Dashboard.css";
 
 const Dashboard = () => {
@@ -73,7 +74,12 @@ const Dashboard = () => {
 
   const links = (
     <ul className="space-y-0.5 px-2">
-      <NavLink to="/" icon={faHome} label="Home Page" onClick={toggleSidebar} />
+      <NavLink
+        to="/dashboard"
+        icon={faHome}
+        label="Dashboard Overview"
+        onClick={toggleSidebar}
+      />
       <NavLink
         to="/dashboard/profile"
         icon={faUser}
@@ -136,8 +142,12 @@ const Dashboard = () => {
           to="/dashboard"
           className="flex items-center gap-3 group"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/40 group-hover:scale-105 transition-transform duration-300">
-            <span className="text-white font-black text-lg">🩸</span>
+          <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-red-500/40 group-hover:scale-105 transition-transform duration-300 bg-white">
+            <img
+              src={logo}
+              alt="UnityBlood logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <h1 className="text-white font-bold text-lg leading-tight tracking-wide">
@@ -149,7 +159,9 @@ const Dashboard = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-4 overflow-y-auto custom-scrollbar">{links}</nav>
+      <nav className="flex-1 py-4 overflow-y-auto custom-scrollbar">
+        {links}
+      </nav>
 
       {/* User Section */}
       <div className="px-4 py-4 border-t border-white/10">
@@ -243,7 +255,10 @@ const Dashboard = () => {
                 title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
                 className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 transition-all duration-200 border db-border"
               >
-                <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-base" />
+                <FontAwesomeIcon
+                  icon={isDark ? faSun : faMoon}
+                  className="text-base"
+                />
               </button>
 
               <button

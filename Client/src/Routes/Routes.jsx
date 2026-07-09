@@ -1,32 +1,46 @@
 import { createBrowserRouter } from "react-router-dom";
+import { lazy } from "react";
 import MainLayout from "../Layout/MainLayout";
-import Home from "../Pages/Home/Home";
-import Registration from "../Pages/Registration/Registration";
-import Login from "../Pages/Home/Login/Login";
-import Dashboard from "../Pages/Dashboard/Dashboard";
-import Profile from "../Pages/Shared/Profile";
-import DashboardHome from "../Pages/Dashboard/DashboardHome";
-import CreateDonation from "../Pages/Dashboard/CreateDonation";
-import EditRequest from "../Pages/Dashboard/EditRequest";
-import MyDonationRequests from "../Pages/Dashboard/MyDonationRequests";
-import AllDonationRequests from "../Pages/Dashboard/AllDonationRequests";
-import AllUsers from "../Pages/Dashboard/AllUsers";
-import ContentManagement from "../Pages/Dashboard/ContentManagement";
-import AddBlog from "../Pages/Dashboard/AddBlog";
-import Settings from "../Pages/Dashboard/Settings";
-import Search from "../Pages/Search/Search";
-import PendingDonationRequests from "../Pages/PendingDonationRequests.jsx/PendingDonationRequests";
-import DonationRequestsDetails from "../Pages/DonationRequestsDetails/DonationRequestsDetails";
-import PublishedBlogs from "../Pages/PublishedBlogs/PublishedBlogs";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
-import ErrorPage from "../Pages/Shared/ErrorPage";
-import Payment from "../Pages/Home/Payment";
+
+const Home = lazy(() => import("../Pages/Home/Home"));
+const Registration = lazy(() => import("../Pages/Registration/Registration"));
+const Login = lazy(() => import("../Pages/Home/Login/Login"));
+const Dashboard = lazy(() => import("../Pages/Dashboard/Dashboard"));
+const Profile = lazy(() => import("../Pages/Shared/Profile"));
+const DashboardHome = lazy(() => import("../Pages/Dashboard/DashboardHome"));
+const CreateDonation = lazy(() => import("../Pages/Dashboard/CreateDonation"));
+const EditRequest = lazy(() => import("../Pages/Dashboard/EditRequest"));
+const MyDonationRequests = lazy(
+  () => import("../Pages/Dashboard/MyDonationRequests"),
+);
+const AllDonationRequests = lazy(
+  () => import("../Pages/Dashboard/AllDonationRequests"),
+);
+const AllUsers = lazy(() => import("../Pages/Dashboard/AllUsers"));
+const ContentManagement = lazy(
+  () => import("../Pages/Dashboard/ContentManagement"),
+);
+const AddBlog = lazy(() => import("../Pages/Dashboard/AddBlog"));
+const Settings = lazy(() => import("../Pages/Dashboard/Settings"));
+const Search = lazy(() => import("../Pages/Search/Search"));
+const PendingDonationRequests = lazy(
+  () => import("../Pages/PendingDonationRequests.jsx/PendingDonationRequests"),
+);
+const DonationRequestsDetails = lazy(
+  () => import("../Pages/DonationRequestsDetails/DonationRequestsDetails"),
+);
+const PublishedBlogs = lazy(
+  () => import("../Pages/PublishedBlogs/PublishedBlogs"),
+);
+const ErrorPage = lazy(() => import("../Pages/Shared/ErrorPage"));
+const Payment = lazy(() => import("../Pages/Home/Payment"));
 
 export const router = createBrowserRouter([
   {
-    path:"*",
-    element:<ErrorPage></ErrorPage>
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
   },
   {
     path: "/",
@@ -66,8 +80,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "/payment",
-        element:<PrivateRoute><Payment></Payment></PrivateRoute>
-      }
+        element: (
+          <PrivateRoute>
+            <Payment></Payment>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -79,35 +97,35 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard",
+        index: true,
         element: <DashboardHome></DashboardHome>,
       },
       {
-        path: "/dashboard/profile",
+        path: "profile",
         element: <Profile></Profile>,
       },
       {
-        path: "/dashboard/createDonation",
+        path: "createDonation",
         element: <CreateDonation></CreateDonation>,
       },
       {
-        path: "/dashboard/request/edit/:id",
+        path: "request/edit/:id",
         element: <EditRequest></EditRequest>,
       },
       {
-        path: "/dashboard/request/view/:id",
+        path: "request/view/:id",
         element: <DonationRequestsDetails></DonationRequestsDetails>,
       },
       {
-        path: "/dashboard/my-donation-requests",
+        path: "my-donation-requests",
         element: <MyDonationRequests></MyDonationRequests>,
       },
       {
-        path: "/dashboard/all-donation-requests",
+        path: "all-donation-requests",
         element: <AllDonationRequests></AllDonationRequests>,
       },
       {
-        path: "/dashboard/all-users",
+        path: "all-users",
         element: (
           <AdminRoute>
             <AllUsers></AllUsers>
@@ -115,15 +133,15 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/dashboard/content-management",
+        path: "content-management",
         element: <ContentManagement></ContentManagement>,
       },
       {
-        path: "/dashboard/content-management/add-blog",
+        path: "content-management/add-blog",
         element: <AddBlog></AddBlog>,
       },
       {
-        path: "/dashboard/settings",
+        path: "settings",
         element: <Settings></Settings>,
       },
     ],

@@ -11,7 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || "";
+  const from = location.state?.from || "/";
 
   const {
     register,
@@ -29,7 +29,9 @@ export default function Login() {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          navigate(from || "/", { replace: true });
+          const destination =
+            typeof from === "string" ? from : from?.pathname || "/";
+          navigate(destination, { replace: true });
         });
       })
       .catch((error) => {

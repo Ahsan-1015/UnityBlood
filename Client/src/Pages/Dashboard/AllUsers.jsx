@@ -93,6 +93,18 @@ export default function AllUsers() {
     }
   };
 
+  const handleDonor = async (id) => {
+    try {
+      await axiosSecure.patch(`/user-update/role/${id}`, { role: "Donor" });
+      await refetch();
+      showAlert("success", "Role Updated!", "User is now a Donor.");
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
+  const normalizeRole = (role) => role?.toString().trim().toLowerCase();
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header section */}
@@ -191,7 +203,7 @@ export default function AllUsers() {
                     {/* Actions */}
                     <td className="db-td text-center">
                       <div className="flex flex-wrap items-center justify-center gap-2">
-                        {user.role !== "Admin" && (
+                        {normalizeRole(user.role) !== "admin" && (
                           <button
                             onClick={() => handleAdmin(user._id)}
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-emerald-500/10 hover:text-emerald-500 dark:hover:text-emerald-400"
@@ -204,7 +216,20 @@ export default function AllUsers() {
                             Admin
                           </button>
                         )}
-                        {user.role !== "Volunteer" && (
+                        {normalizeRole(user.role) === "volunteer" && (
+                          <button
+                            onClick={() => handleDonor(user._id)}
+                            className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-indigo-500/10 hover:text-indigo-500 dark:hover:text-indigo-400"
+                            title="Make Donor"
+                          >
+                            <FontAwesomeIcon
+                              icon={faUserGraduate}
+                              className="text-[10px]"
+                            />
+                            Donor
+                          </button>
+                        )}
+                        {normalizeRole(user.role) !== "volunteer" && (
                           <button
                             onClick={() => handleVolunteer(user._id)}
                             className="btn-ghost py-1 px-3 text-xs flex items-center gap-1 hover:bg-sky-500/10 hover:text-sky-500 dark:hover:text-sky-400"

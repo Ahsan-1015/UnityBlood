@@ -3,6 +3,7 @@
 UnityBlood is a blood donation and community support platform built with React, Vite, Tailwind CSS, Node.js, Express, and MongoDB.
 
 ## Features
+
 - Browse donation requests
 - Submit and manage donation requests
 - Explore blog content and funding opportunities
@@ -10,11 +11,13 @@ UnityBlood is a blood donation and community support platform built with React, 
 - Light/dark theme support
 
 ## Tech Stack
+
 - Frontend: React, Vite, Tailwind CSS, DaisyUI
 - Backend: Node.js, Express, MongoDB
 - Authentication: Firebase + JWT
 
 ## Run Locally
+
 ```bash
 git clone https://github.com/Ahsan-1015/UnityBlood.git
 cd UnityBlood
@@ -30,4 +33,5 @@ npm start
 ```
 
 ## Project Status
+
 This repository contains the current working version of the project with UI theme updates and donation request ordering improvements.

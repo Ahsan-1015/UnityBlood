@@ -6,7 +6,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { app } from "../../firebase.config";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAxiosSecure from "../hooks/useAxiosSecure";
@@ -80,15 +80,19 @@ export default function AuthProvider({ children }) {
     };
   }, [axiosPublic]);
 
-  const authInfo = {
-    user,
-    loading,
-    createUser,
-    updateProfileInfo,
-    userInfo,
-    signIn,
-    logOut,
-  };
+  const authInfo = useMemo(
+    () => ({
+      user,
+      loading,
+      createUser,
+      updateProfileInfo,
+      userInfo,
+      signIn,
+      logOut,
+    }),
+    [user, loading, userInfo],
+  );
+
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
