@@ -16,6 +16,12 @@ const allowedOrigins = [
   "http://localhost:5174",
 ];
 
+// Add origins from environment variables if defined
+if (process.env.ALLOWED_ORIGINS) {
+  const envOrigins = process.env.ALLOWED_ORIGINS.split(",").map(o => o.trim());
+  allowedOrigins.push(...envOrigins);
+}
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   console.log("Incoming request origin:", origin);
@@ -24,12 +30,28 @@ app.use((req, res, next) => {
 
 const corsOptions = {
   origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
     if (!origin) return callback(null, true);
+    
+    // Check if origin is explicitly allowed
     if (allowedOrigins.includes(origin)) return callback(null, true);
+    
+    // Allow localhost and 127.0.0.1
     if (/^https?:\/\/localhost(:\d+)?$/.test(origin))
       return callback(null, true);
     if (/^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin))
       return callback(null, true);
+      
+    // Dynamically allow deployment preview and production domains
+    if (
+      /\.vercel\.app$/.test(origin) ||
+      /\.render\.com$/.test(origin) ||
+      /\.firebaseapp\.com$/.test(origin) ||
+      /\.web\.app$/.test(origin)
+    ) {
+      return callback(null, true);
+    }
+    
     return callback(new Error("CORS policy: origin not allowed"));
   },
   credentials: true,
@@ -55,11 +77,10 @@ const client = new MongoClient(uri, {
   },
 });
 
-async function run() {
-  try {
-    // Connect the client to the server (optional starting in v4.7) but
-    // explicitly connecting here helps ensure DB operations succeed.
-    await client.connect();
+// Connect the client to the server asynchronously
+client.connect()
+  .then(() => console.log("Connected to MongoDB successfully!"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
     // ------------------------
     const usersCollection = client.db("unity_blood").collection("users");
@@ -423,18 +444,6 @@ async function run() {
     });
 
     // ------------------------
-
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!",
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
-  }
-}
-run().catch(console.dir);
 
 app.get("/", (req, res) => {
   res.send("unity_blood server is running to");
