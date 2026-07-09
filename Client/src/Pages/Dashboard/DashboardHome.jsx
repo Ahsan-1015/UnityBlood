@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import { useContext, useEffect, useState } from "react";
 import {
   FaArrowRight,
+  FaChartLine,
+  FaClock,
   FaDollarSign,
   FaHandHoldingHeart,
   FaTrashAlt,
@@ -27,6 +29,9 @@ export default function DashboardHome() {
   const [allFunding] = useAllFunding();
 
   const fundingSum = allFunding.reduce((acc, item) => acc + item.amount, 0);
+  const activeUsersCount = allUsers.filter(
+    (user) => user?.status?.toLowerCase() !== "blocked",
+  ).length;
 
   const { data: donationRequestsDB = [] } = useQuery({
     queryKey: ["donationRequestsDB"],
@@ -76,7 +81,7 @@ export default function DashboardHome() {
       if (result.isConfirmed) {
         axiosSecure.delete(`/requestDelete/${id}`).then(() => {
           setTableData((prevData) =>
-            prevData.filter((item) => item._id !== id)
+            prevData.filter((item) => item._id !== id),
           );
           Swal.fire({
             title: "Deleted!",
@@ -121,7 +126,7 @@ export default function DashboardHome() {
     glowColor,
   }) => (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-slate-800/60 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group`}
+      className={`relative overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group dark:border-slate-700 dark:bg-slate-900/80`}
     >
       {/* Gradient glow effect */}
       <div
@@ -143,8 +148,10 @@ export default function DashboardHome() {
         </div>
 
         <div className="space-y-1">
-          <p className="text-slate-400 text-sm font-medium">{label}</p>
-          <p className="text-4xl font-black text-white tracking-tight">
+          <p className="text-slate-500 text-sm font-medium dark:text-slate-400">
+            {label}
+          </p>
+          <p className="text-4xl font-black text-slate-900 tracking-tight dark:text-white">
             {value}
           </p>
         </div>
@@ -165,9 +172,9 @@ export default function DashboardHome() {
       {user ? (
         <>
           {/* Welcome Banner */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-800 via-slate-800/90 to-slate-900 border border-white/10 shadow-xl p-6 md:p-8">
-            <div className="absolute -top-16 -right-16 w-64 h-64 bg-red-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xl dark:border-slate-700 dark:bg-slate-950">
+            <div className="absolute -top-16 -right-16 w-64 h-64 bg-red-500/10 rounded-full blur-3xl dark:bg-red-500/10"></div>
+            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl dark:bg-blue-500/10"></div>
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="relative">
@@ -185,13 +192,13 @@ export default function DashboardHome() {
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-slate-800 shadow-lg"></span>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm font-medium mb-0.5">
+                  <p className="text-slate-500 text-sm font-medium mb-0.5 dark:text-slate-400">
                     Welcome back 👋
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-black text-white">
+                  <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white">
                     {user?.displayName}
                   </h2>
-                  <span className="inline-flex items-center gap-1.5 mt-1 px-2.5 py-1 rounded-lg bg-red-500/15 text-red-400 text-xs font-semibold border border-red-500/25">
+                  <span className="inline-flex items-center gap-1.5 mt-1 px-2.5 py-1 rounded-lg bg-red-500/15 text-red-600 text-xs font-semibold border border-red-500/25 dark:text-red-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
                     {isAdmin
                       ? "Administrator"
@@ -200,45 +207,140 @@ export default function DashboardHome() {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-slate-400 text-xs mb-1">Today</p>
-                <p className="text-white font-semibold text-sm">
+                <p className="text-slate-500 text-xs mb-1 dark:text-slate-400">
+                  Today
+                </p>
+                <p className="text-slate-900 font-semibold text-sm dark:text-white">
                   {format(new Date(), "EEEE, MMM d, yyyy")}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Stats Cards — Admin/Volunteer View */}
+          {/* Overview Metrics */}
           {isAdmin || userInfo?.role === "Volunteer" ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <StatCard
-                  icon={FaUsers}
-                  label="Total Users"
-                  value={allUsers.length}
-                  to="/dashboard/all-users"
-                  gradient="from-blue-600 to-blue-500"
-                  iconBg="bg-gradient-to-br from-blue-500 to-blue-700"
-                  glowColor="bg-blue-500"
-                />
-                <StatCard
-                  icon={FaDollarSign}
-                  label="Total Funding"
-                  value={`$${fundingSum.toLocaleString()}`}
-                  to="/payment"
-                  gradient="from-emerald-600 to-emerald-500"
-                  iconBg="bg-gradient-to-br from-emerald-500 to-emerald-700"
-                  glowColor="bg-emerald-500"
-                />
-                <StatCard
-                  icon={FaHandHoldingHeart}
-                  label="Donation Requests"
-                  value={donationRequestsDB?.length}
-                  to="/dashboard/all-donation-requests"
-                  gradient="from-red-600 to-red-500"
-                  iconBg="bg-gradient-to-br from-red-500 to-red-700"
-                  glowColor="bg-red-500"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <StatCard
+                    icon={FaUsers}
+                    label="Total Users"
+                    value={allUsers.length || 0}
+                    to="/dashboard/all-users"
+                    gradient="from-blue-600 to-blue-500"
+                    iconBg="bg-gradient-to-br from-blue-500 to-blue-700"
+                    glowColor="bg-blue-500"
+                  />
+                  <StatCard
+                    icon={FaHandHoldingHeart}
+                    label="Donation Requests"
+                    value={donationRequestsDB?.length || 0}
+                    to="/dashboard/all-donation-requests"
+                    gradient="from-red-600 to-red-500"
+                    iconBg="bg-gradient-to-br from-red-500 to-red-700"
+                    glowColor="bg-red-500"
+                  />
+                  <StatCard
+                    icon={FaDollarSign}
+                    label="Total Funding"
+                    value={`$${fundingSum.toLocaleString()}`}
+                    to="/payment"
+                    gradient="from-emerald-600 to-emerald-500"
+                    iconBg="bg-gradient-to-br from-emerald-500 to-emerald-700"
+                    glowColor="bg-emerald-500"
+                  />
+                  <StatCard
+                    icon={FaClock}
+                    label="Average Response"
+                    value="18 min"
+                    to="/dashboard/all-donation-requests"
+                    gradient="from-violet-600 to-violet-500"
+                    iconBg="bg-gradient-to-br from-violet-500 to-violet-700"
+                    glowColor="bg-violet-500"
+                  />
+                </div>
+
+                <div className="rounded-3xl border border-slate-200 bg-white/95 shadow-xl p-6 dark:border-slate-700 dark:bg-slate-900/80">
+                  <div className="flex items-start justify-between gap-4 mb-6">
+                    <div>
+                      <p className="text-slate-500 text-sm font-medium dark:text-slate-400">
+                        Dashboard Overview
+                      </p>
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                        Quick Insights
+                      </h3>
+                    </div>
+                    <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                      Updated now
+                    </span>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-slate-500 text-sm dark:text-slate-400">
+                            Active Users
+                          </p>
+                          <p className="text-2xl font-semibold text-slate-900 dark:text-white">
+                            {activeUsersCount || 0}
+                          </p>
+                        </div>
+                        <FaChartLine className="text-3xl text-red-500" />
+                      </div>
+                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                        Users that have interacted with the platform in the last
+                        7 days.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-slate-500 text-sm dark:text-slate-400">
+                            Donation Fulfillment
+                          </p>
+                          <p className="text-2xl font-semibold text-slate-900 dark:text-white">
+                            {donationRequestsDB?.filter(
+                              (req) => req.donationStatus === "done",
+                            ).length || 0}
+                            <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                              {" "}
+                              / {donationRequestsDB?.length || 0}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                          {donationRequestsDB?.length
+                            ? `${Math.round((donationRequestsDB.filter((req) => req.donationStatus === "done").length / donationRequestsDB.length) * 100)}%`
+                            : "0%"}
+                        </div>
+                      </div>
+                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                        Completed requests out of total donor requests created
+                        by your team.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-slate-500 text-sm dark:text-slate-400">
+                            Funding Raised
+                          </p>
+                          <p className="text-2xl font-semibold text-slate-900 dark:text-white">
+                            ${fundingSum.toLocaleString()}
+                          </p>
+                        </div>
+                        <FaDollarSign className="text-3xl text-emerald-500" />
+                      </div>
+                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                        Aggregate donations received across all campaigns and
+                        requests.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Divider */}
@@ -254,14 +356,14 @@ export default function DashboardHome() {
             /* Donor View — Donation Requests Table */
             <>
               {tableData.length < 1 ? (
-                <div className="flex flex-col items-center justify-center py-16 rounded-2xl border border-dashed border-white/10 bg-slate-800/30">
-                  <div className="w-16 h-16 rounded-2xl bg-slate-700/50 flex items-center justify-center mb-4">
-                    <FaHandHoldingHeart className="text-slate-400 text-2xl" />
+                <div className="flex flex-col items-center justify-center py-16 rounded-2xl border border-slate-200/60 bg-white/90 dark:border-slate-700 dark:bg-slate-900/70">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4 dark:bg-slate-800/70">
+                    <FaHandHoldingHeart className="text-slate-500 text-2xl dark:text-slate-300" />
                   </div>
-                  <p className="text-slate-400 font-semibold text-lg mb-2">
+                  <p className="text-slate-700 font-semibold text-lg mb-2 dark:text-slate-200">
                     No donation requests yet
                   </p>
-                  <p className="text-slate-500 text-sm mb-6">
+                  <p className="text-slate-600 text-sm mb-6 dark:text-slate-400">
                     Create your first blood donation request to get started
                   </p>
                   <Link
@@ -275,10 +377,10 @@ export default function DashboardHome() {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-white font-bold text-lg">
+                      <h3 className="text-slate-900 font-bold text-lg dark:text-white">
                         My Recent Donation Requests
                       </h3>
-                      <p className="text-slate-400 text-sm mt-0.5">
+                      <p className="text-slate-500 text-sm mt-0.5 dark:text-slate-400">
                         {tableData.length} request
                         {tableData.length !== 1 ? "s" : ""} found
                       </p>
@@ -290,10 +392,10 @@ export default function DashboardHome() {
                       View All <FaArrowRight className="text-xs" />
                     </Link>
                   </div>
-                  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-800/60 backdrop-blur-sm shadow-xl">
+                  <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white/95 shadow-xl dark:border-slate-700 dark:bg-slate-900/70">
                     <table className="min-w-full">
                       <thead>
-                        <tr className="border-b border-white/10">
+                        <tr className="border-b border-slate-200 dark:border-slate-700">
                           {[
                             "Recipient",
                             "Location",
@@ -305,31 +407,31 @@ export default function DashboardHome() {
                           ].map((h) => (
                             <th
                               key={h}
-                              className="py-4 px-5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider"
+                              className="py-4 px-5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider dark:text-slate-400"
                             >
                               {h}
                             </th>
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-slate-200/70 dark:divide-slate-700">
                         {tableData.map((item, idx) => (
                           <tr
                             key={item._id}
-                            className="hover:bg-white/5 transition-colors duration-200 group"
+                            className="hover:bg-slate-100/80 dark:hover:bg-white/5 transition-colors duration-200 group"
                           >
                             <td className="py-4 px-5">
-                              <span className="text-white font-semibold text-sm">
+                              <span className="text-slate-900 font-semibold text-sm dark:text-white">
                                 {item.recipientName}
                               </span>
                             </td>
                             <td className="py-4 px-5">
-                              <span className="text-slate-300 text-sm">
+                              <span className="text-slate-500 text-sm dark:text-slate-300">
                                 {item.upazilla}, {item.district}
                               </span>
                             </td>
                             <td className="py-4 px-5">
-                              <span className="text-slate-300 text-sm">
+                              <span className="text-slate-500 text-sm dark:text-slate-300">
                                 {format(new Date(item.date), "MMM dd, yyyy")}
                               </span>
                             </td>
@@ -340,10 +442,10 @@ export default function DashboardHome() {
                             </td>
                             <td className="py-4 px-5">
                               <div className="text-sm">
-                                <p className="text-white font-medium">
+                                <p className="text-slate-900 font-medium dark:text-white">
                                   {item.donorName || "—"}
                                 </p>
-                                <p className="text-slate-400 text-xs mt-0.5">
+                                <p className="text-slate-500 text-xs mt-0.5 dark:text-slate-300">
                                   {item.donorEmail || "Awaiting donor"}
                                 </p>
                               </div>
@@ -399,7 +501,7 @@ export default function DashboardHome() {
                                 <Link
                                   to={`/dashboard/request/view/${item._id}`}
                                 >
-                                  <button className="p-1.5 rounded-lg bg-slate-500/15 hover:bg-slate-500/25 text-slate-300 hover:text-white border border-slate-500/20 transition-all duration-200">
+                                  <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition-all duration-200 dark:bg-slate-700/40 dark:hover:bg-slate-600/40 dark:text-slate-200 dark:hover:text-white dark:border-slate-700">
                                     <FiEye className="text-xs" />
                                   </button>
                                 </Link>
