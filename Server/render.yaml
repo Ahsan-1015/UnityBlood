@@ -1,0 +1,27 @@
+# Render Blueprint Configuration for UnityBlood Server
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: unity-blood-server
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 18.18.0
+      - key: PORT
+        value: 5000
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: ACCESS_TOKEN_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
